@@ -1,10 +1,18 @@
-class Itk < Formula
+class ItkM1 < Formula
   desc "Insight Toolkit is a toolkit for performing registration and segmentation"
   homepage "https://itk.org"
-  url "https://github.com/InsightSoftwareConsortium/ITK/releases/download/v5.1.2/InsightToolkit-5.1.2.tar.gz"
-  sha256 "f1e5a78e11125348f68f655c6b89b617c3a8b2c09f710081f621054811a70c98"
   license "Apache-2.0"
   head "https://github.com/InsightSoftwareConsortium/ITK.git"
+
+  stable do
+    url "https://github.com/InsightSoftwareConsortium/ITK/releases/download/v5.1.2/InsightToolkit-5.1.2.tar.gz"
+    sha256 "f1e5a78e11125348f68f655c6b89b617c3a8b2c09f710081f621054811a70c98"
+  
+    patch do
+      url "https://raw.githubusercontent.com/tezheng/homebrew-m1/5bc23fbf9d28a94bc9d3642d20c97ec76eb5b464/Patch/itk/v5.1.2.patch"
+      sha256 "75f7fb6c7c53c9f7d5508073df024de966b8a5a03257f993c06b6ac4520d68f8"
+    end
+  end
 
   livecheck do
     url :stable
@@ -18,6 +26,8 @@ class Itk < Formula
   end
 
   depends_on "cmake" => :build
+  depends_on "zlib"
+  depends_on "expat"
   depends_on "fftw"
   depends_on "gdcm"
   depends_on "hdf5"
@@ -33,15 +43,14 @@ class Itk < Formula
 
   def install
     args = std_cmake_args + %W[
-      -DBUILD_SHARED_LIBS=ON
-      -DBUILD_TESTING=OFF
+      -DCMAKE_BUILD_TYPE=Release
       -DCMAKE_INSTALL_RPATH:STRING=#{lib}
       -DCMAKE_INSTALL_NAME_DIR:STRING=#{lib}
+      -DBUILD_SHARED_LIBS=ON
+      -DBUILD_TESTING=OFF
       -DITK_USE_64BITS_IDS=ON
-      -DITK_USE_STRICT_CONCEPT_CHECKING=ON
       -DITK_USE_SYSTEM_ZLIB=ON
       -DITK_USE_SYSTEM_EXPAT=ON
-      -DModule_SCIFIO=ON
       -DITKV3_COMPATIBILITY:BOOL=OFF
       -DITK_USE_SYSTEM_FFTW=ON
       -DITK_USE_FFTWF=ON
@@ -52,9 +61,12 @@ class Itk < Formula
       -DITK_USE_SYSTEM_TIFF=ON
       -DITK_USE_SYSTEM_GDCM=ON
       -DITK_LEGACY_REMOVE=ON
+      -DITK_USE_GPU=ON
       -DModule_ITKReview=ON
       -DModule_ITKVtkGlue=ON
-      -DITK_USE_GPU=ON
+      -DModule_ITKTestKernel:INTERNAL=OFF
+      -DModule_ITKTestKernel-ADVANCED:INTERNAL=OFF
+      -DModule_SCIFIO=ON
     ]
 
     # Avoid references to the Homebrew shims directory
