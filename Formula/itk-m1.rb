@@ -60,7 +60,6 @@ class ItkM1 < Formula
       -DITK_USE_SYSTEM_PNG=ON
       -DITK_USE_SYSTEM_TIFF=ON
       -DITK_USE_SYSTEM_GDCM=ON
-      -DITK_LEGACY_REMOVE=ON
       -DITK_USE_GPU=ON
       -DModule_ITKReview=ON
       -DModule_ITKVtkGlue=ON
