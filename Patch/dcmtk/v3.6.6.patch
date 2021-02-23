@@ -1,0 +1,36 @@
+diff --git a/config/tests/arith.cc b/config/tests/arith.cc
+index 12371170b..f7c4766b6 100644
+--- a/config/tests/arith.cc
++++ b/config/tests/arith.cc
+@@ -40,11 +40,6 @@
+ #include <ieeefp.h>
+ #endif
+ 
+-#ifdef __APPLE__
+-// For controlling floating point exceptions on OS X.
+-#include <xmmintrin.h>
+-#endif
+-
+ #ifdef HAVE_SETJMP_H
+ // For setjmp for the SunPro compiler
+ #include <setjmp.h>
+@@ -340,8 +335,6 @@ static void provoke_snan()
+ #ifdef HAVE_WINDOWS_H
+     _clearfp();
+     _controlfp( _controlfp(0,0) & ~_EM_INVALID, _MCW_EM );
+-#elif defined(__APPLE__)
+-    _MM_SET_EXCEPTION_MASK( _MM_GET_EXCEPTION_MASK() & ~_MM_MASK_INVALID );
+ #elif defined(HAVE_FENV_H) && defined(HAVE_PROTOTYPE_FEENABLEEXCEPT)
+     feenableexcept( FE_INVALID );
+ #elif defined(HAVE_IEEEFP_H) && !defined(__CYGWIN__)
+@@ -382,9 +375,7 @@ static int test_snan( STD_NAMESPACE ostream& out, const char* name )
+     _controlfp( _controlfp(0,0) | _EM_INVALID, _MCW_EM );
+ #elif defined(HAVE_FENV_H)
+     feclearexcept( FE_INVALID );
+-#ifdef __APPLE__
+-    _MM_SET_EXCEPTION_MASK( _MM_GET_EXCEPTION_MASK() | _MM_MASK_INVALID );
+-#elif defined(HAVE_FENV_H) && defined(HAVE_PROTOTYPE_FEENABLEEXCEPT)
++#if defined(HAVE_FENV_H) && defined(HAVE_PROTOTYPE_FEENABLEEXCEPT)
+     fedisableexcept( FE_INVALID );
+ #elif defined(HAVE_IEEEFP_H) && !defined(__CYGWIN__)
+     // Cygwin unfortunately seems to have <ieeefp.h> but no implementation of fgetmask/fpsetmask
