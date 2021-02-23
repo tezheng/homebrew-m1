@@ -1,9 +1,17 @@
-class Dcmtk < Formula
+class DcmtkM1 < Formula
   desc "OFFIS DICOM toolkit command-line utilities"
   homepage "https://dicom.offis.de/dcmtk.php.en"
-  url "https://dicom.offis.de/download/dcmtk/dcmtk366/dcmtk-3.6.6.tar.gz"
-  sha256 "6859c62b290ee55677093cccfd6029c04186d91cf99c7642ae43627387f3458e"
   head "https://git.dcmtk.org/dcmtk.git"
+
+  stable do
+    url "https://dicom.offis.de/download/dcmtk/dcmtk366/dcmtk-3.6.6.tar.gz"
+    sha256 "6859c62b290ee55677093cccfd6029c04186d91cf99c7642ae43627387f3458e"
+
+    patch do
+      url "https://raw.githubusercontent.com/tezheng/homebrew-m1/5ec0ea90fba365f9ade0369b250f581fc5036d0a/Patch/dcmtk/v3.6.6.patch"
+      sha256 "63c275c7ed36bce57c0155a39084992a5cfadd28899630b8a31412218d9c3aca"
+    end
+  end
 
   livecheck do
     url "https://dicom.offis.de/download/dcmtk/release/"
@@ -25,9 +33,7 @@ class Dcmtk < Formula
 
   def install
     mkdir "build" do
-      system "cmake", "-DBUILD_SHARED_LIBS=OFF", *std_cmake_args, ".."
-      system "make", "install"
-      system "cmake", "-DBUILD_SHARED_LIBS=ON", *std_cmake_args, ".."
+      system "cmake", "-DBUILD_SHARED_LIBS=OFF", "-DCMAKE_BUILD_TYPE=Release", *std_cmake_args, ".."
       system "make", "install"
 
       on_macos do
