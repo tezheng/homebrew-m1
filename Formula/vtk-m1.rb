@@ -1,4 +1,4 @@
-class Vtk < Formula
+class VtkM1 < Formula
   desc "Toolkit for 3D computer graphics, image processing, and visualization"
   homepage "https://www.vtk.org/"
   url "https://www.vtk.org/files/release/9.0/VTK-9.0.1.tar.gz"
@@ -47,6 +47,8 @@ class Vtk < Formula
     inreplace "Common/Core/vtkConfigure.h.in", "@CMAKE_CXX_COMPILER@", "clang++"
 
     args = std_cmake_args + %W[
+      -DVTK_GROUP_ENABLE_Web:STRING=YES
+      -DVTK_MODULE_ENABLE_VTK_WebPython:STRING=YES
       -DBUILD_SHARED_LIBS:BOOL=ON
       -DBUILD_TESTING:BOOL=OFF
       -DCMAKE_INSTALL_NAME_DIR:STRING=#{lib}
