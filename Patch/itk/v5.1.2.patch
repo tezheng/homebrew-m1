@@ -1,0 +1,13 @@
+diff --git a/Modules/Core/Common/src/itkFloatingPointExceptions_unix.cxx b/Modules/Core/Common/src/itkFloatingPointExceptions_unix.cxx
+index 27f25b29..3aadc3c6 100644
+--- a/Modules/Core/Common/src/itkFloatingPointExceptions_unix.cxx
++++ b/Modules/Core/Common/src/itkFloatingPointExceptions_unix.cxx
+@@ -61,7 +61,7 @@ http://graphviz.sourcearchive.com/documentation/2.16/gvrender__pango_8c-source.h
+ 
+ #if defined(__APPLE__)
+ #  include "TargetConditionals.h"
+-#  if TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR
++#  if TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR || TARGET_CPU_ARM64
+ #    define ITK_FEENABLEEXCEPT_NOOP
+ #  endif
+ #endif
